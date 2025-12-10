@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 export default async function handler(req, res) {
   const TARGET_API = "http://autocarrenta.runasp.net";
 
@@ -16,11 +14,11 @@ export default async function handler(req, res) {
         : undefined,
     });
 
-    const data = await response.text();
-
-    res.status(response.status).send(data);
+    const text = await response.text();
+    res.status(response.status).send(text);
   } catch (err) {
-    console.error("Proxy error:", err);
+    console.error("PROXY ERROR:", err);
     res.status(500).json({ error: "Proxy failed", detail: err.message });
   }
 }
+
