@@ -1,27 +1,23 @@
-import fetch from "node-fetch";
-
 export default async function handler(req, res) {
   const TARGET_API = "http://autocarrenta.runasp.net";
 
-  // quita /api del inicio y reenvía la ruta completa a tu backend
-  const path = req.url.replace("/api", "");
-  const url = TARGET_API + path;
+  const url = TARGET_API + req.url.replace("/api", "");
 
   try {
     const response = await fetch(url, {
       method: req.method,
       headers: {
-        ...req.headers,
+        "Content-Type": req.headers["content-type"] || "application/json",
       },
       body: ["POST", "PUT", "PATCH"].includes(req.method)
         ? req.body
         : undefined,
     });
 
-    const data = await response.text();
-    res.status(response.status).send(data);
+    const text = await response.text();
+    res.status(response.status).send(text);
   } catch (err) {
-    console.error("Proxy error:", err);
+    console.error("PROXY ERROR:", err);
     res.status(500).json({ error: "Proxy failed", detail: err.message });
   }
 }
